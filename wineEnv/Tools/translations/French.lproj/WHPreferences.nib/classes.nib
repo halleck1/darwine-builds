@@ -1,0 +1,25 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {chooseWine = id; enableArguments = id; showPreferences = id; }; 
+            CLASS = WHPreferences; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                addArguments = id; 
+                arguments = id; 
+                environmentForm = id; 
+                environmentView = id; 
+                redirectionsView = id; 
+                selectionTab = id; 
+                stdErrRedirectionMatrix = id; 
+                stdOutRedirectionMatrix = id; 
+                window = id; 
+                winePath = id; 
+                wineView = id; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}
