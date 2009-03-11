@@ -216,7 +216,7 @@ echo -n "##### buildDarwine => freetype: checking version..."
 if [ ! -d "freetype-$FREETYPE_VERSION" ]; then
     echo "updating to $FREETYPE_VERSION"
     rm -rf freetype*
-    download_and_expand "http://download.savannah.gnu.org/releases/freetype/freetype-"$FREETYPE_VERSION".tar.gz"
+    download_and_expand "http://mirror.publicns.net/pub/nongnu/freetype/freetype-"$FREETYPE_VERSION".tar.gz"
     configure_and_make "freetype-$FREETYPE_VERSION" '--silent --prefix='$BUILDDIRECTORY'/usr'
 else
     echo "OK ($FREETYPE_VERSION)"
