@@ -70,7 +70,6 @@ export BUILDDIRECTORY=$(PWD)
 #http://pkgconfig.freedesktop.org/releases/
 #http://www.littlecms.com/downloads.htm
 #ftp://xmlsoft.org/libxml2/
-#ftp://xmlsoft.org/libxml2/
 #http://www.zlib.net/
 #http://www.libpng.org/pub/png/libpng.html
 #http://www.ijg.org/files/
@@ -87,7 +86,7 @@ export BUILDDIRECTORY=$(PWD)
 export PKG_CONFIG_VERSION=0.23
 export LCMS_VERSION=1.17
 #export LIBXML2_VERSION=2.6.32
-export LIBXML2_VERSION=2.7.1
+export LIBXML2_VERSION=2.7.3
 export LIBXSLT_VERSION=1.1.24
 export ZLIB_VERSION=1.2.3
 #export LIBPNG_VERSION=1.2.29
