@@ -1,0 +1,16 @@
+Index: WHController.h
+===================================================================
+RCS file: /cvsroot/darwine/WineHelper/WHController.h,v
+retrieving revision 1.7
+diff -u -r1.7 WHController.h
+--- WHController.h	18 Oct 2007 19:08:26 -0000	1.7
++++ WHController.h	20 Nov 2007 10:07:34 -0000
+@@ -24,7 +24,7 @@
+  */
+ 
+ #import "WHOpenArgumentsView.h"
+-#include "WineHelper.h"
++#import "WineHelper.h"
+ 
+ #import "WHSession.h"
+ 

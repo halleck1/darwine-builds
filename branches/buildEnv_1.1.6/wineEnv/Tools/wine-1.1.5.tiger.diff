@@ -1,0 +1,92 @@
+--- create_darwine_distrib.sh	2006-10-15 23:01:47.000000000 +0200
++++ create_darwine_distrib_mike.sh	2007-11-20 23:22:40.000000000 +0100
+@@ -49,6 +49,11 @@
+   rm -Rf /tmp/WineHelper
+ }
+ 
++tarcp()
++{
++  (cd "$1"; tar cfv - . ) | ( mkdir -p "$2"; cd "$2" ; tar xfpv - )
++}
++
+ ##########################################################################
+ # Arg check
+ if [ "$#" -eq 2 ]
+@@ -86,19 +91,47 @@
+ cd $WINE
+ if [ "$BUILDWINE" = "yes" ]
+ then
+-    ./configure --prefix=/tmp/wine_root --silent && make -s && make -s install
++    ./configure --prefix=/tmp/wine_root --x-includes=/usr/X11R6/include --x-libraries=/usr/X11R6/lib && make -s && make -s install
+ else
+     make -s install
+ fi
+ check_err $? "Can't build wine"
+ 
+ ##########################################################################
++# add freetype and fake wine pax -rwl
++echo "# Adding Windows Applications, libs, bins, etc and fake wine"
++ln -fs ~/.wine/drive_c/Program\ Files/ "/tmp/$DARWINEPKGNAME/Darwine/Windows Applications"
++cp -P -R -p "../../usr/bin"/* "/tmp/wine_root/bin/"
++check_err $? "Can't add bins"
++cp -P -R -p "../../usr/lib"/* "/tmp/wine_root/lib/"
++check_err $? "Can't add libs"
++cp -P -R -p "../../usr/etc" "/tmp/wine_root/etc"
++check_err $? "Can't add etc"
++ln -s /usr/X11R6/lib/libAppleWM.dylib /tmp/wine_root/lib/libAppleWM.1.dylib
++check_err $? "Can't link libAppleVM"
++mv "/tmp/wine_root/bin/wine" "/tmp/wine_root/bin/mwine"
++check_err $? "Can't move wine"
++cp -r "../../Tools/wine" "/tmp/wine_root/bin/wine"
++check_err $? "Can't create fake wine"
++chmod a+x "/tmp/wine_root/bin/wine"
++check_err $? "Can't chmod fake wine"
++rm -rf "/tmp/$DARWINEPKGNAME/Darwine"
++ditto --rsrc "../../Tools/iconfolder" "/tmp/$DARWINEPKGNAME/Darwine"
++check_err $? "Can't add foldericon"
++cp -r "../../Tools/TRiX.app" "/tmp/$DARWINEPKGNAME/TRiX.app"
++check_err $? "Can't copy TRiX"
++cp -r "../../Tools/Readme.txt" "/tmp/$DARWINEPKGNAME/Readme.txt"
++check_err $? "Can't copy Readme"
++
++##########################################################################
+ # Build WineHelper from CVS
+ echo "# Building WineHelper from CVS..."
+ cd /tmp
+ cvs -d:pserver:anonymous:@darwine.cvs.sf.net:/cvsroot/darwine export -Dtomorrow WineHelper
+ check_err $? "Can't checkout WineHelper from CVS $?"
+ cd WineHelper
++mkdir -p build/Default/WineHelper.app/Contents/Resources/
++cp -r "$BUILDDIRECTORY/Tools/translations/French.lproj" build/Default/WineHelper.app/Contents/Resources/French.lproj
+ xcodebuild -project WineHelper.xcodeproj
+ check_err $? "Can't build WineHelper"
+ mv build/Default/WineHelper.app "/tmp/$DARWINEPKGNAME/Darwine"
+@@ -110,7 +141,7 @@
+ mkdir -p "/tmp/$DARWINEPKGNAME/Darwine/Wine.bundle/Contents"
+ check_err $? "Can't create Wine.bundle"
+ cd "/tmp/$DARWINEPKGNAME/Darwine/Wine.bundle/Contents/"
+-cp -r /tmp/wine_root/ .
++tarcp "/tmp/wine_root/" "/tmp/$DARWINEPKGNAME/Darwine/Wine.bundle/Contents/"
+ rm -rf ./include
+ check_err $? "Can't create Wine.bundle"
+ 
+@@ -139,10 +170,17 @@
+ # Make a Disk Image
+ echo "# Create the Disk Image for Darwine $VERSION..."
+ cd /tmp
+-hdiutil create -srcfolder "/tmp/$DARWINEPKGNAME" "$USER_WD/$DARWINEPKGNAME.dmg"
++hdiutil mount "$BUILDDIRECTORY/Tools/Darwine.dmg"
++rm -r "/Volumes/Darwine/Darwine"
++rm -r "/Volumes/Darwine/TRiX.app"
++tarcp "/tmp/$DARWINEPKGNAME/Darwine" "/Volumes/Darwine/Darwine"
++tarcp "/tmp/$DARWINEPKGNAME/TRiX.app" "/Volumes/Darwine/TRiX.app"
++cp -r "/tmp/$DARWINEPKGNAME/Readme.txt" "/Volumes/Readme.txt"
++hdiutil eject "/Volumes/Darwine"
++rm "$USER_WD/$DARWINEPKGNAME.dmg"
++hdiutil convert -format UDZO -o "$USER_WD/$DARWINEPKGNAME.dmg" "$BUILDDIRECTORY/Tools/Darwine.dmg"
+ check_err $? "Can't create the Disk Image."
+ 
+-
+ ################################################
+ # Prepare for Universal SDK
+ echo "# Prepare the SDK for Darwine $VERSION..."
