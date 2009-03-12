@@ -389,6 +389,18 @@ cd wine-$DARWINE_VERSION/
 patch -p0 -u -R < $BUILDDIRECTORY/Tools/ie100percent.diff
 cd -
 
+#patch wine font default font antialiasing off
+echo "##### buildDarwine => patching default antialiasing off..."
+cd wine-$DARWINE_VERSION/
+patch -p0 -u < $BUILDDIRECTORY/Tools/wine-1.1.15.antialias.diff
+cd -
+
+#patch wine missing fonts/conf.d and fonts/conf.avail directories
+echo "##### buildDarwine => creating missing fonts files..." 
+cd $BUILDDIRECTORY/usr/etc
+patch -p2 -u < $BUILDDIRECTORY/Tools/fonts.diff
+cd -
+
 #build darwine
 echo "##### buildDarwine => darwine: building..."
 cd distrib

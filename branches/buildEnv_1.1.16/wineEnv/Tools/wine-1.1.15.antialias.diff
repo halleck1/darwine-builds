@@ -1,0 +1,11 @@
+--- ../wine-1.1.15/tools/wine.inf.in~	2009-02-22 16:10:18.000000000 +0000
++++ ./tools/wine.inf.in	2009-02-22 16:10:34.000000000 +0000
+@@ -220,7 +220,7 @@
+ HKCU,Software\Wine\Debug,"RelayFromExclude",2,"winex11.drv;user32;gdi32;advapi32;kernel32"
+ 
+ [Desktop]
+-HKCU,%Desktop%,"FontSmoothing",2,"0"
++HKCU,%Desktop%,"FontSmoothing",2,"2"
+ HKCU,%Desktop%,"DragFullWindows",2,"0"
+ HKCU,%Desktop%,"SmoothScroll",3,00,00,00,00
+ HKCU,%Desktop%,"UserPreferenceMask",3,10,00,00,80
