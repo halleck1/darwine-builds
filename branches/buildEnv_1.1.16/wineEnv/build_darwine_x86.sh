@@ -224,7 +224,7 @@ fi
 
 
 #things we only need on Tiger
-#if test $(echo $OSTYPE | grep darwin8); then
+if test $(echo $OSTYPE | grep darwin8); then
 
 
 
@@ -254,6 +254,8 @@ fi
         echo "OK ($LIBXSLT_VERSION)"
     fi
 
+
+fi
 
 
 #things we only need on Tiger
