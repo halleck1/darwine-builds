@@ -403,6 +403,11 @@ cd $BUILDDIRECTORY/usr/etc
 patch -p2 -u < $BUILDDIRECTORY/Tools/fonts.diff
 cd -
 
+#expand compressed base Darwine img
+cd $BUILDDIRECTORY/Tools
+hdiutil convert -format UDRW -o Darwine.dmg Darwine.gzip.dmg
+cd -
+
 #build darwine
 echo "##### buildDarwine => darwine: building..."
 cd distrib
