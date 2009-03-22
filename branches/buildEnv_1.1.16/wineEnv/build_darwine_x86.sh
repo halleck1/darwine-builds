@@ -404,6 +404,7 @@ patch -p2 -u < $BUILDDIRECTORY/Tools/fonts.diff
 cd -
 
 #expand compressed base Darwine img
+echo "##### buildDarwine => creating base Darwine.dmg image"
 cd $BUILDDIRECTORY/Tools
 hdiutil convert -format UDRW -o Darwine.dmg Darwine.gzip.dmg
 cd -
