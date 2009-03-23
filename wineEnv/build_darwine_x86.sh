@@ -350,7 +350,7 @@ fi
 #openssl
 echo ""
 echo -n "##### buildDarwine => openssl: checking version... "
-if [ ! -d "fontforge-$OPENSSL_VERSION" ]; then
+if [ ! -d "openssl-$OPENSSL_VERSION" ]; then
     echo "updating to $OPENSSL_VERSION"
     rm -rf openssl*
     download_and_expand "http://www.openssl.org/source/openssl-$OPENSSL_VERSION.tar.gz"
