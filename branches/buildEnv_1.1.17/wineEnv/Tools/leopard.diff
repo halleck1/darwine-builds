@@ -18,7 +18,7 @@
  then
 -    ./configure --prefix=/tmp/wine_root --silent && make -s && make -s install
 +    export BUILDDIRECTORY=$(cd ../..; pwd)
-+    export CPPFLAGS="-I$BUILDDIRECTORY/usr/include -I$BUILDDIRECTORY/usr/include/libxml2 -I$BUILDDIRECTORY/usr/include/libxslt -I$BUILDDIRECTORY/usr/include/libpng12 -I$BUILDDIRECTORY/usr/include/gphoto2 -I$BUILDDIRECTORY/usr/include/sane"
++    export CPPFLAGS="-I$BUILDDIRECTORY/usr/include -I$BUILDDIRECTORY/usr/include/libxml2 -I$BUILDDIRECTORY/usr/include/libxslt -I$BUILDDIRECTORY/usr/include/libpng12 -I$BUILDDIRECTORY/usr/include/gphoto2 -I$BUILDDIRECTORY/usr/include/sane -I$BUILDDIRECTORY/usr/include/openssl"
 +    export CFLAGS="-I$BUILDDIRECTORY/usr/include"
 +    export LDFLAGS="-L$BUILDDIRECTORY/usr/lib"
 +    export PATH=$PATH:"$BUILDDIRECTORY/usr/bin"
