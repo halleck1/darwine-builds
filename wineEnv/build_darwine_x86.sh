@@ -409,6 +409,12 @@ cd $BUILDDIRECTORY/Tools
 hdiutil convert -format UDRW -o Darwine.dmg Darwine.gzip.dmg
 cd -
 
+#expand compressed base Darwine img
+echo "##### buildDarwine => creating iconfolder"
+cd $BUILDDIRECTORY/Tools
+tar xf iconfolder.tar
+cd -
+
 #build darwine
 echo "##### buildDarwine => darwine: building..."
 cd distrib
