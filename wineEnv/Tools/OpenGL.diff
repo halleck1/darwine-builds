@@ -1,0 +1,16 @@
+diff -Nru wine-1.0-rc4/dlls/winex11.drv/opengl.c wine/dlls/winex11.drv/opengl.c
+--- opengl.c	2008-06-06 17:24:30.000000000 +0200
++++ opengl.c.new	2008-06-06 18:12:15.000000000 +0200
+@@ -475,7 +475,11 @@
+         pglXGetFBConfigAttrib = pglXGetProcAddressARB((const GLubyte *) "glXGetFBConfigAttrib");
+         pglXGetVisualFromFBConfig = pglXGetProcAddressARB((const GLubyte *) "glXGetVisualFromFBConfig");
+         pglXQueryDrawable = pglXGetProcAddressARB((const GLubyte *) "glXQueryDrawable");
+-    } else if(glxRequireExtension("GLX_SGIX_fbconfig")) {
++    } else if(
++#ifdef __APPLE__
++              TRUE ||
++#endif
++              glxRequireExtension("GLX_SGIX_fbconfig")) {
+         pglXChooseFBConfig = pglXGetProcAddressARB((const GLubyte *) "glXChooseFBConfigSGIX");
+         pglXGetFBConfigAttrib = pglXGetProcAddressARB((const GLubyte *) "glXGetFBConfigAttribSGIX");
+         pglXGetVisualFromFBConfig = pglXGetProcAddressARB((const GLubyte *) "glXGetVisualFromFBConfigSGIX");
