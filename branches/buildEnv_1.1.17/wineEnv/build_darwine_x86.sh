@@ -47,12 +47,13 @@ download_and_expand()
 }
 
 
+CONFIGURE=./configure
 
 configure_and_make()
 {
     echo -n "##### buildDarwine => $1: building... "
     cd "$1"
-    ./configure $2 &> ../build.log
+    $CONFIGURE $2 &> ../build.log
     check_err $? "Can't configure "$1
     make --silent &> ../build.log
     check_err $? "Can't make "$1
@@ -79,6 +80,7 @@ export BUILDDIRECTORY=$(PWD)
 #http://www.sane-project.org/
 #http://www.gphoto.org/download/
 #http://fontforge.sourceforge.net/
+#http://www.openssl.org/source/
 
 
 
@@ -101,6 +103,7 @@ export LIBSANE_VERSION=1.0.18
 export LIBGPHOTO2_VERSION=2.4.2
 #export FONTFORGE_VERSION=20080607
 export FONTFORGE_VERSION=20080828
+export OPENSSL_VERSION=0.9.8j
 export DARWINE_VERSION=1.1.17
 
 
@@ -340,6 +343,23 @@ if [ ! -d "fontforge-$FONTFORGE_VERSION" ]; then
     configure_and_make "fontforge-$FONTFORGE_VERSION" '--silent --enable-shared --prefix='$BUILDDIRECTORY'/usr --without-x --with-freetype-src=../freetype-'$FREETYPE_VERSION
 else
     echo "OK ($FONTFORGE_VERSION)"
+fi
+
+
+
+#openssl
+echo ""
+echo -n "##### buildDarwine => openssl: checking version... "
+if [ ! -d "fontforge-$OPENSSL_VERSION" ]; then
+    echo "updating to $OPENSSL_VERSION"
+    rm -rf openssl*
+    download_and_expand "http://www.openssl.org/source/openssl-$OPENSSL_VERSION.tar.gz"
+    CONFIGURE_BEFORE=$CONFIGURE
+    CONFIGURE=./config # openssl only works with config
+    configure_and_make "openssl-$OPENSSL_VERSION" '-shared --prefix='$BUILDDIRECTORY'/usr'
+    CONFIGURE=$CONFIGURE_BEFORE
+else
+    echo "OK ($OPENSSL_VERSION)"
 fi
 
 
