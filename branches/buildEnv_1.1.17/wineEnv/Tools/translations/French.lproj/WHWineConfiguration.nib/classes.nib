@@ -1,0 +1,35 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {audioChange = id; graphicChange = id; useDesktopChange = id; }; 
+            CLASS = WHDriversController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {audio = id; graphic = id; height = id; useDesktop = id; width = id; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {add = id; remove = id; setMapping = id; }; 
+            CLASS = WHDrivesController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {drivesTable = id; lettersMenu = id; }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {save = id; }; 
+            CLASS = WHWineConfiguration; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                driveController = id; 
+                driversController = id; 
+                progressIndic = id; 
+                progressPanel = id; 
+                registryOperation = id; 
+                tabs = id; 
+                window = id; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}
