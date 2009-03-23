@@ -400,13 +400,19 @@ cd -
 #patch wine missing fonts/conf.d and fonts/conf.avail directories
 echo "##### buildDarwine => creating missing fonts files..." 
 cd $BUILDDIRECTORY/usr/etc
-patch -p2 -u < $BUILDDIRECTORY/Tools/fonts.diff
+patch -f -p2 -u < $BUILDDIRECTORY/Tools/fonts.diff
 cd -
 
 #expand compressed base Darwine img
 echo "##### buildDarwine => creating base Darwine.dmg image"
 cd $BUILDDIRECTORY/Tools
 hdiutil convert -format UDRW -o Darwine.dmg Darwine.gzip.dmg
+cd -
+
+#expand tarred iconfolder -- it's tarred because subversion can't handle the Icon^M filename
+echo "##### buildDarwine => creating iconfolder"
+cd $BUILDDIRECTORY/Tools
+tar xf iconfolder.tar
 cd -
 
 #build darwine
