@@ -12,7 +12,7 @@
  ##########################################################################
  # Arg check
  if [ "$#" -eq 2 ]
-@@ -86,19 +91,53 @@
+@@ -86,19 +91,54 @@
  cd $WINE
  if [ "$BUILDWINE" = "yes" ]
  then
@@ -21,6 +21,7 @@
 +    export CPPFLAGS="-I$BUILDDIRECTORY/usr/include -I$BUILDDIRECTORY/usr/include/libxml2 -I$BUILDDIRECTORY/usr/include/libxslt -I$BUILDDIRECTORY/usr/include/libpng12 -I$BUILDDIRECTORY/usr/include/gphoto2 -I$BUILDDIRECTORY/usr/include/sane -I$BUILDDIRECTORY/usr/include/openssl"
 +    export CFLAGS="-I$BUILDDIRECTORY/usr/include"
 +    export LDFLAGS="-L$BUILDDIRECTORY/usr/lib"
++    export PKG_CONFIG_PATH=$BUILDDIRECTORY/usr/lib/pkgconfig
 +    export PATH=$PATH:"$BUILDDIRECTORY/usr/bin"
 +    export DYLD_FALLBACK_LIBRARY_PATH="$BUILDDIRECTORY/usr/lib"
 +    ./configure --prefix=/tmp/wine_root --x-includes=/usr/X11R6/include --x-libraries=/usr/X11R6/lib && make -s && make -s install

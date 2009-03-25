@@ -226,39 +226,32 @@ fi
 
 
 
-#things we only need on Tiger
-if test $(echo $OSTYPE | grep darwin8); then
-
-
-
-    #libxml2
-    echo ""
-    echo -n "##### buildDarwine => libxml2: checking version... "
-    if [ ! -d "libxml2-$LIBXML2_VERSION" ]; then
-        echo "updating to $LIBXML2_VERSION"
-        rm -rf libxml2*
-        download_and_expand "ftp://xmlsoft.org/libxml2/libxml2-"$LIBXML2_VERSION".tar.gz"
-        configure_and_make "libxml2-$LIBXML2_VERSION" '--silent --enable-shared --prefix='$BUILDDIRECTORY'/usr'
-    else
-        echo "OK ($LIBXML2_VERSION)"
-    fi
-
-
-
-    #libxslt
-    echo ""
-    echo -n "##### buildDarwine => libxslt: checking version... "
-    if [ ! -d "libxslt-$LIBXSLT_VERSION" ]; then
-        echo "updating to $LIBXSLT_VERSION"
-        rm -rf libxslt*
-        download_and_expand "ftp://xmlsoft.org/libxml2/libxslt-"$LIBXSLT_VERSION".tar.gz"
-        configure_and_make "libxslt-$LIBXSLT_VERSION" '--silent --enable-shared --prefix='$BUILDDIRECTORY'/usr --with-libxml-src='$BUILDDIRECTORY'/src/libxml2-'$LIBXML2_VERSION
-    else
-        echo "OK ($LIBXSLT_VERSION)"
-    fi
-
-
+#libxml2
+echo ""
+echo -n "##### buildDarwine => libxml2: checking version... "
+if [ ! -d "libxml2-$LIBXML2_VERSION" ]; then
+    echo "updating to $LIBXML2_VERSION"
+    rm -rf libxml2*
+    download_and_expand "ftp://xmlsoft.org/libxml2/libxml2-"$LIBXML2_VERSION".tar.gz"
+    configure_and_make "libxml2-$LIBXML2_VERSION" '--silent --enable-shared --prefix='$BUILDDIRECTORY'/usr'
+else
+    echo "OK ($LIBXML2_VERSION)"
 fi
+
+
+
+#libxslt
+echo ""
+echo -n "##### buildDarwine => libxslt: checking version... "
+if [ ! -d "libxslt-$LIBXSLT_VERSION" ]; then
+    echo "updating to $LIBXSLT_VERSION"
+    rm -rf libxslt*
+    download_and_expand "ftp://xmlsoft.org/libxml2/libxslt-"$LIBXSLT_VERSION".tar.gz"
+    configure_and_make "libxslt-$LIBXSLT_VERSION" '--silent --enable-shared --prefix='$BUILDDIRECTORY'/usr --with-libxml-src='$BUILDDIRECTORY'/src/libxml2-'$LIBXML2_VERSION
+else
+    echo "OK ($LIBXSLT_VERSION)"
+fi
+
 
 
 #things we only need on Tiger
