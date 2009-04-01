@@ -1,0 +1,326 @@
+Binary files ../wine-1.1.2/.DS_Store and ./.DS_Store differ
+diff -u --recursive ../wine-1.1.2/configure ./configure
+--- ../wine-1.1.2/configure	2008-07-25 17:42:25.000000000 +0200
++++ ./configure	2008-08-04 16:29:17.000000000 +0200
+@@ -9750,6 +9750,7 @@
+                       X11/XKBlib.h \
+                       X11/Xutil.h \
+                       X11/Xcursor/Xcursor.h \
++                      X11/extensions/applewm.h \
+                       X11/extensions/shape.h \
+                       X11/extensions/XInput.h \
+                       X11/extensions/XShm.h \
+@@ -9893,6 +9894,81 @@
+ 
+         fi
+ 
++                if test "$ac_cv_header_X11_extensions_applewm_h" = "yes"
++        then
++              { echo "$as_me:$LINENO: checking for XAppleWMQueryExtension in -lAppleWM" >&5
++echo $ECHO_N "checking for XAppleWMQueryExtension in -lAppleWM... $ECHO_C" >&6; }
++if test "${ac_cv_lib_AppleWM_XAppleWMQueryExtension+set}" = set; then
++  echo $ECHO_N "(cached) $ECHO_C" >&6
++else
++  ac_check_lib_save_LIBS=$LIBS
++LIBS="-lAppleWM $X_LIBS -lXext -lX11 $X_EXTRA_LIBS $LIBS"
++cat >conftest.$ac_ext <<_ACEOF
++/* confdefs.h.  */
++_ACEOF
++cat confdefs.h >>conftest.$ac_ext
++cat >>conftest.$ac_ext <<_ACEOF
++/* end confdefs.h.  */
++
++/* Override any GCC internal prototype to avoid an error.
++   Use char because int might match the return type of a GCC
++   builtin and then its argument prototype would still apply.  */
++#ifdef __cplusplus
++extern "C"
++#endif
++char XAppleWMQueryExtension ();
++int
++main ()
++{
++return XAppleWMQueryExtension ();
++  ;
++  return 0;
++}
++_ACEOF
++rm -f conftest.$ac_objext conftest$ac_exeext
++if { (ac_try="$ac_link"
++case "(($ac_try" in
++  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
++  *) ac_try_echo=$ac_try;;
++esac
++eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
++  (eval "$ac_link") 2>conftest.er1
++  ac_status=$?
++  grep -v '^ *+' conftest.er1 >conftest.err
++  rm -f conftest.er1
++  cat conftest.err >&5
++  echo "$as_me:$LINENO: \$? = $ac_status" >&5
++  (exit $ac_status); } && {
++	 test -z "$ac_c_werror_flag" ||
++	 test ! -s conftest.err
++       } && test -s conftest$ac_exeext &&
++       $as_test_x conftest$ac_exeext; then
++  ac_cv_lib_AppleWM_XAppleWMQueryExtension=yes
++else
++  echo "$as_me: failed program was:" >&5
++sed 's/^/| /' conftest.$ac_ext >&5
++
++	ac_cv_lib_AppleWM_XAppleWMQueryExtension=no
++fi
++
++rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
++      conftest$ac_exeext conftest.$ac_ext
++LIBS=$ac_check_lib_save_LIBS
++fi
++{ echo "$as_me:$LINENO: result: $ac_cv_lib_AppleWM_XAppleWMQueryExtension" >&5
++echo "${ECHO_T}$ac_cv_lib_AppleWM_XAppleWMQueryExtension" >&6; }
++if test $ac_cv_lib_AppleWM_XAppleWMQueryExtension = yes; then
++
++cat >>confdefs.h <<\_ACEOF
++#define HAVE_LIBAPPLEWM 1
++_ACEOF
++
++                            X_EXTRA_LIBS="$X_EXTRA_LIBS -lAppleWM"
++fi
++
++        fi
++
++
+                 if test "$ac_cv_header_X11_Xcursor_Xcursor_h" = "yes"
+         then
+             { echo "$as_me:$LINENO: checking for -lXcursor" >&5
+diff -u --recursive ../wine-1.1.2/configure.ac ./configure.ac
+--- ../wine-1.1.2/configure.ac	2008-07-25 17:42:25.000000000 +0200
++++ ./configure.ac	2008-08-04 16:29:17.000000000 +0200
+@@ -620,6 +620,7 @@
+                       X11/XKBlib.h \
+                       X11/Xutil.h \
+                       X11/Xcursor/Xcursor.h \
++                      X11/extensions/applewm.h \
+                       X11/extensions/shape.h \
+                       X11/extensions/XInput.h \
+                       X11/extensions/XShm.h \
+@@ -643,6 +644,15 @@
+               $X_LIBS -lXext -lX11 $X_EXTRA_LIBS)
+         fi
+ 
++        dnl *** Check for X AppleWM extension
++        if test "$ac_cv_header_X11_extensions_applewm_h" = "yes"
++        then
++              AC_CHECK_LIB(AppleWM, XAppleWMQueryExtension,
++                            [AC_DEFINE(HAVE_LIBAPPLEWM, 1, [Define if you have the X AppleWM extension])
++                            X_EXTRA_LIBS="$X_EXTRA_LIBS -lAppleWM"],,
++              $X_LIBS -lXext -lX11 $X_EXTRA_LIBS)
++        fi
++
+         dnl *** Check for X cursor
+         if test "$ac_cv_header_X11_Xcursor_Xcursor_h" = "yes"
+         then
+Binary files ../wine-1.1.2/dlls/.DS_Store and ./dlls/.DS_Store differ
+diff -u --recursive ../wine-1.1.2/dlls/winex11.drv/event.c ./dlls/winex11.drv/event.c
+--- ../wine-1.1.2/dlls/winex11.drv/event.c	2008-07-25 17:42:25.000000000 +0200
++++ ./dlls/winex11.drv/event.c	2008-08-05 14:24:50.000000000 +0200
+@@ -80,6 +80,7 @@
+ static void X11DRV_ConfigureNotify( HWND hwnd, XEvent *event );
+ static void X11DRV_PropertyNotify( HWND hwnd, XEvent *event );
+ static void X11DRV_ClientMessage( HWND hwnd, XEvent *event );
++static void X11DRV_GravityNotify( HWND hwnd, XEvent *event );
+ 
+ struct event_handler
+ {
+@@ -114,7 +115,7 @@
+     /* ReparentNotify */
+     { ConfigureNotify,  X11DRV_ConfigureNotify },
+     /* ConfigureRequest */
+-    /* GravityNotify */
++    { GravityNotify,    X11DRV_GravityNotify },
+     /* ResizeRequest */
+     /* CirculateNotify */
+     /* CirculateRequest */
+@@ -127,7 +128,7 @@
+     { MappingNotify,    X11DRV_MappingNotify },
+ };
+ 
+-static int nb_event_handlers = 18;  /* change this if you add handlers above */
++static int nb_event_handlers = 19;  /* change this if you add handlers above */
+ 
+ 
+ /* return the name of an X event */
+@@ -1323,6 +1324,22 @@
+ 
+ 
+ /**********************************************************************
++ *           X11DRV_GravityNotify
++ */
++static void X11DRV_GravityNotify( HWND hwnd, XEvent *event )
++{
++    struct x11drv_win_data *data = X11DRV_get_win_data( hwnd );
++
++    /* In this case we don't get a ConfigureNotify so we fake it */
++    if (!data) return;
++
++    if (event->xgravity.x != data->whole_rect.left || event->xgravity.y != data->whole_rect.top)
++        SetWindowPos( hwnd, 0, event->xgravity.x, event->xgravity.y, 0, 0,
++                      SWP_NOSIZE | SWP_NOZORDER | SWP_NOACTIVATE );
++}
++
++
++/**********************************************************************
+  *           X11DRV_WindowMessage   (X11DRV.@)
+  */
+ LRESULT X11DRV_WindowMessage( HWND hwnd, UINT msg, WPARAM wp, LPARAM lp )
+diff -u --recursive ../wine-1.1.2/dlls/winex11.drv/window.c ./dlls/winex11.drv/window.c
+--- ../wine-1.1.2/dlls/winex11.drv/window.c	2008-07-25 17:42:25.000000000 +0200
++++ ./dlls/winex11.drv/window.c	2008-08-05 14:30:41.000000000 +0200
+@@ -28,6 +28,7 @@
+ #ifdef HAVE_UNISTD_H
+ # include <unistd.h>
+ #endif
++#include <sys/types.h>
+ 
+ #include <X11/Xlib.h>
+ #include <X11/Xresource.h>
+@@ -754,6 +755,12 @@
+             size_hints->x = data->whole_rect.left;
+             size_hints->y = data->whole_rect.top;
+             size_hints->flags |= PPosition;
++            if (data->managed && applewm_title_height &&
++                get_mwm_decorations( data, style, GetWindowLongW(data->hwnd,GWL_EXSTYLE) ) & MWM_DECOR_TITLE)
++            {
++                size_hints->y -= applewm_title_height;
++                size_hints->win_gravity = NorthWestGravity;
++            }
+         }
+ 
+         if (!is_window_resizable( data, style ))
+@@ -1214,6 +1221,9 @@
+            data->whole_rect.right - data->whole_rect.left,
+            data->whole_rect.bottom - data->whole_rect.top, changes.sibling, mask );
+ 
++    if ((mask & CWY) && data->managed && applewm_title_height &&
++        get_mwm_decorations( data, style, GetWindowLongW(data->hwnd,GWL_EXSTYLE) ) & MWM_DECOR_TITLE)
++        changes.y -= applewm_title_height;
+     wine_tsx11_lock();
+     set_size_hints( display, data, style );
+     XReconfigureWMWindow( display, data->whole_window,
+@@ -1324,7 +1334,7 @@
+  */
+ static Window create_whole_window( Display *display, struct x11drv_win_data *data )
+ {
+-    int cx, cy, mask;
++    int cx, cy, top, mask;
+     XSetWindowAttributes attr;
+     WCHAR text[1024];
+     HRGN hrgn;
+@@ -1344,9 +1354,14 @@
+     wine_tsx11_lock();
+ 
+     data->whole_rect = data->window_rect;
++    top = data->window_rect.top;
++    if (data->managed && applewm_title_height &&
++        get_mwm_decorations( data, GetWindowLongW(data->hwnd,GWL_STYLE),
++                             GetWindowLongW(data->hwnd,GWL_EXSTYLE) ) & MWM_DECOR_TITLE)
++        top -= applewm_title_height;
+     data->whole_window = XCreateWindow( display, root_window,
+                                         data->window_rect.left - virtual_screen_rect.left,
+-                                        data->window_rect.top - virtual_screen_rect.top,
++                                        top - virtual_screen_rect.top,
+                                         cx, cy, 0, screen_depth, InputOutput,
+                                         visual, mask, &attr );
+ 
+@@ -2007,7 +2022,7 @@
+     if (thread_data->current_event && thread_data->current_event->xany.window == data->whole_window)
+         event_type = thread_data->current_event->type;
+ 
+-    if (event_type != ConfigureNotify && event_type != PropertyNotify)
++    if (event_type != ConfigureNotify && event_type != PropertyNotify && event_type != GravityNotify)
+         event_type = 0;  /* ignore other events */
+ 
+     if (data->mapped)
+diff -u --recursive ../wine-1.1.2/dlls/winex11.drv/x11drv.h ./dlls/winex11.drv/x11drv.h
+--- ../wine-1.1.2/dlls/winex11.drv/x11drv.h	2008-07-25 17:42:25.000000000 +0200
++++ ./dlls/winex11.drv/x11drv.h	2008-08-06 10:34:56.000000000 +0200
+@@ -567,6 +567,8 @@
+ extern int alloc_system_colors;
+ extern int xrender_error_base;
+ extern HMODULE x11drv_module;
++extern int applewm_title_height;
++extern int find_offscreen_formats;
+ 
+ extern BYTE key_state_table[256];
+ extern POINT cursor_pos;
+diff -u --recursive ../wine-1.1.2/dlls/winex11.drv/x11drv_main.c ./dlls/winex11.drv/x11drv_main.c
+--- ../wine-1.1.2/dlls/winex11.drv/x11drv_main.c	2008-07-25 17:42:25.000000000 +0200
++++ ./dlls/winex11.drv/x11drv_main.c	2008-08-05 14:32:27.000000000 +0200
+@@ -41,6 +41,9 @@
+ #ifdef HAVE_X11_EXTENSIONS_XRENDER_H
+ #include <X11/extensions/Xrender.h>
+ #endif
++#ifdef HAVE_X11_EXTENSIONS_APPLEWM_H
++#include <X11/extensions/applewm.h>
++#endif
+ 
+ #include "windef.h"
+ #include "winbase.h"
+@@ -94,6 +97,10 @@
+ DWORD thread_data_tls_index = TLS_OUT_OF_INDEXES;
+ int xrender_error_base = 0;
+ HMODULE x11drv_module = 0;
++int applewm_event_base = 0;
++int applewm_error_base = 0;
++int applewm_title_height = 0;
++int find_offscreen_formats = 0;
+ 
+ static x11drv_error_callback err_callback;   /* current callback for error */
+ static Display *err_callback_display;        /* display callback is set for */
+@@ -537,6 +544,23 @@
+     X11DRV_XComposite_Init();
+ #endif
+ 
++#ifdef HAVE_LIBAPPLEWM
++    if (XAppleWMQueryExtension( display, &applewm_event_base, &applewm_error_base ))
++    {
++        short unused, height;
++
++        /* retrieve the offset that the Apple quartz-wm window manager will use to
++         * display the title bar. This is used to compensate the fact that quartz-wm
++         * ignores all our attempts to set the window gravity.
++         * FIXME: the frame class is hardcoded to Document for now. */
++        if (!XAppleWMFrameGetRect( display, AppleWMFrameClassDocument, AppleWMFrameRectTitleBar,
++                                   0, 0, 0, 0, 0, 0, 0, 0,
++                                   &unused, &unused, &unused, &height )) height = 0;
++        applewm_title_height = height;
++        TRACE( "got Apple title height %d\n", height );
++    }
++#endif
++
+ #ifdef HAVE_XKB
+     if (use_xkb) use_xkb = XkbUseExtension( gdi_display, NULL, NULL );
+ #endif
+diff -u --recursive ../wine-1.1.2/include/config.h.in ./include/config.h.in
+--- ../wine-1.1.2/include/config.h.in	2008-07-25 17:42:25.000000000 +0200
++++ ./include/config.h.in	2008-08-04 16:29:17.000000000 +0200
+@@ -306,6 +306,9 @@
+ /* Define to 1 if you have the `ldap_parse_vlv_control' function. */
+ #undef HAVE_LDAP_PARSE_VLV_CONTROL
+ 
++/* Define if you have the X AppleWM extension */
++#undef HAVE_LIBAPPLEWM
++
+ /* Define if you have libaudioIO */
+ #undef HAVE_LIBAUDIOIO
+ 
+@@ -933,6 +936,9 @@
+ /* Define to 1 if you have the `waitpid' function. */
+ #undef HAVE_WAITPID
+ 
++/* Define to 1 if you have the <X11/extensions/applewm.h> header file. */
++#undef HAVE_X11_EXTENSIONS_APPLEWM_H
++
+ /* Define to 1 if you have the <X11/extensions/shape.h> header file. */
+ #undef HAVE_X11_EXTENSIONS_SHAPE_H
+ 
+Only in .: wine-1.1.2.winfix.diff
