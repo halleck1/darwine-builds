@@ -1,0 +1,32 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {launchWinecfg = id; open = id; terminateProcess = id; }; 
+            CLASS = WHController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                logField = id; 
+                openArgumentsView = id; 
+                processField = id; 
+                processTable = id; 
+                processWindow = id; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {enableArguments = id; }; 
+            CLASS = WHOpenArgumentsView; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {argumentsCheck = id; argumentsField = id; }; 
+            SUPERCLASS = NSView; 
+        }, 
+        {
+            ACTIONS = {showPreferences = id; }; 
+            CLASS = WHPreferences; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }
+    ); 
+    IBVersion = 1; 
+}
